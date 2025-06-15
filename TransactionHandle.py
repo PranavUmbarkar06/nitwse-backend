@@ -77,6 +77,7 @@ def sell():
 
 @transactionhandle.route('/import', methods=['GET'])
 def display():
+    print("Access")
     try:
         userID = int(request.args.get("userID"))
     except (TypeError, ValueError):
