@@ -6,7 +6,7 @@ from LoginHandle import accountdetails
 from StockHandle import stockhandle
 from TransactionHandle import transactionhandle
 
-from flask_cors import CORS
+
 
 CORS(app, origins=["http://localhost:5173", "https://nitwse-backend.onrender.com"], supports_credentials=True)
 
