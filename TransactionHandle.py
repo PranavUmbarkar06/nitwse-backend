@@ -89,3 +89,8 @@ def display():
             "stocks": user.get("stocksOwned", {})
         })
     return jsonify({"error": "User not found", "stocks": {}}), 404
+
+def set_db(database):
+    global mongo
+    mongo = database
+
