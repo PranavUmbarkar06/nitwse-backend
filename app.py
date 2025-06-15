@@ -6,8 +6,10 @@ from LoginHandle import accountdetails
 from StockHandle import stockhandle
 from TransactionHandle import transactionhandle
 
-app = Flask(__name__)
-CORS(app)
+from flask_cors import CORS
+
+CORS(app, origins=["http://localhost:5173", "https://nitwse-backend.onrender.com"], supports_credentials=True)
+
 
 client = MongoClient("mongodb+srv://nitwse:mayankthegoat@wse.0zosyhw.mongodb.net/?retryWrites=true&w=majority&appName=WSE")
 db = client["nitwse"]
