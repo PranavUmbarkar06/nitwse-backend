@@ -19,7 +19,8 @@ import LoginHandle as acc
 import StockHandle as sh
 import TransactionHandle as tr
 
-acc.users = db["users"]
+acc.set_collection(db["users"])
+
 sh.set_db(client)
 
 tr.set_db(client)
