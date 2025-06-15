@@ -1,13 +1,13 @@
 from flask import Blueprint, request, jsonify
 
 transactionhandle = Blueprint('transactionhandle', __name__)
-db=None  # Will be initialized in app.py
+mongo = None  # Will be initialized in app.py
 
 def updateBalance(userID, updatedPrice):
-    temp = db.usertransactions.find_one({"userID": userID})
-    if not temp or temp["balance"] + updatedPrice < 0:
+    temp = mongo.db.usertransactions.find_one({"userID": userID})
+    if not temp or temp.get("balance", 0) + updatedPrice < 0:
         return False
-    db.usertransactions.update_one(
+    mongo.db.usertransactions.update_one(
         {"userID": userID},
         {"$inc": {"balance": updatedPrice}}
     )
@@ -15,7 +15,7 @@ def updateBalance(userID, updatedPrice):
 
 def buyStock(userID, stockPrice, quantity, stockName):
     if updateBalance(userID, -stockPrice * quantity):
-        db.usertransactions.update_one(
+        mongo.db.usertransactions.update_one(
             {"userID": userID},
             {"$inc": {f"stocksOwned.{stockName}": quantity}}
         )
@@ -23,9 +23,12 @@ def buyStock(userID, stockPrice, quantity, stockName):
     return False
 
 def sellStock(userID, stockPrice, quantity, stockName):
-    temp = db.usertransactions.find_one({"userID": userID})
-    if stockName in temp.get("stocksOwned", {}) and temp["stocksOwned"][stockName] >= quantity:
-        db.usertransactions.update_one(
+    temp = mongo.db.usertransactions.find_one({"userID": userID})
+    if not temp:
+        return False
+    owned = temp.get("stocksOwned", {}).get(stockName, 0)
+    if owned >= quantity:
+        mongo.db.usertransactions.update_one(
             {"userID": userID},
             {"$inc": {f"stocksOwned.{stockName}": -quantity}}
         )
@@ -77,19 +80,16 @@ def sell():
 
 @transactionhandle.route('/import', methods=['GET'])
 def display():
-    print("Access")
     try:
         userID = int(request.args.get("userID"))
     except (TypeError, ValueError):
         return jsonify({"error": "Invalid or missing userID"}), 400
 
-    user = db.usertransactions.find_one({"userID": userID})
+    user = mongo.db.usertransactions.find_one({"userID": userID})
     if user:
         return jsonify({
             "balance": user.get("balance", 0),
             "stocks": user.get("stocksOwned", {})
         })
     return jsonify({"error": "User not found", "stocks": {}}), 404
-
-
 
