@@ -30,3 +30,7 @@ def get_remaining_stocks():
     remaining_stocks = [stock for stock in all_stocks if stock['Name'] not in user_stocks]
 
     return jsonify({"remaining_stocks": remaining_stocks})
+
+def set_db(database):
+    global mongo
+    mongo = database
