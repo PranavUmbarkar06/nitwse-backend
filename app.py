@@ -12,7 +12,10 @@ CORS(app, origins=["http://localhost:5173", "https://nitwse-backend.onrender.com
 
 
 client = MongoClient("mongodb+srv://nitwse:mayankthegoat@wse.0zosyhw.mongodb.net/?retryWrites=true&w=majority&appName=WSE")
-db = client["nitwse"]
+db =None
+def set_db(client):
+    global db
+    db = client["nitwse"]
 
 # Inject collections into modules
 import LoginHandle as acc
