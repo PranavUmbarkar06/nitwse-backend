@@ -21,7 +21,7 @@ import TransactionHandle as tr
 
 acc.users = db["users"]
 sh.db = db
-tr.db = db
+tr.set_db(client)
 
 # Register all blueprints
 app.register_blueprint(accountdetails, url_prefix="/auth")
