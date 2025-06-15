@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify
 
 transactionhandle = Blueprint('transactionhandle', __name__)
-mongo = None  # Will be initialized in app.py
+db=None  # Will be initialized in app.py
 
 def updateBalance(userID, updatedPrice):
     temp = db.usertransactions.find_one({"userID": userID})
@@ -91,7 +91,5 @@ def display():
         })
     return jsonify({"error": "User not found", "stocks": {}}), 404
 
-def set_db(database):
-    global mongo
-    mongo = database
+
 
