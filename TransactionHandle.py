@@ -4,10 +4,10 @@ transactionhandle = Blueprint('transactionhandle', __name__)
 mongo = None  # Will be initialized in app.py
 
 def updateBalance(userID, updatedPrice):
-    temp = mongo.db.usertransactions.find_one({"userID": userID})
+    temp = db.usertransactions.find_one({"userID": userID})
     if not temp or temp["balance"] + updatedPrice < 0:
         return False
-    mongo.db.usertransactions.update_one(
+    db.usertransactions.update_one(
         {"userID": userID},
         {"$inc": {"balance": updatedPrice}}
     )
@@ -15,7 +15,7 @@ def updateBalance(userID, updatedPrice):
 
 def buyStock(userID, stockPrice, quantity, stockName):
     if updateBalance(userID, -stockPrice * quantity):
-        mongo.db.usertransactions.update_one(
+        db.usertransactions.update_one(
             {"userID": userID},
             {"$inc": {f"stocksOwned.{stockName}": quantity}}
         )
@@ -23,9 +23,9 @@ def buyStock(userID, stockPrice, quantity, stockName):
     return False
 
 def sellStock(userID, stockPrice, quantity, stockName):
-    temp = mongo.db.usertransactions.find_one({"userID": userID})
+    temp = db.usertransactions.find_one({"userID": userID})
     if stockName in temp.get("stocksOwned", {}) and temp["stocksOwned"][stockName] >= quantity:
-        mongo.db.usertransactions.update_one(
+        db.usertransactions.update_one(
             {"userID": userID},
             {"$inc": {f"stocksOwned.{stockName}": -quantity}}
         )
