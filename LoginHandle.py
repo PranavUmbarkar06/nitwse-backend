@@ -52,3 +52,8 @@ def login():
         }), 200
 
     return jsonify({"message": "Invalid credentials", "success": False}), 401
+
+def set_collection(collection):
+    global users
+    users = collection
+
