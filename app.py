@@ -7,7 +7,7 @@ from StockHandle import stockhandle
 from TransactionHandle import transactionhandle
 
 
-
+app = Flask(__name__)
 CORS(app, origins=["http://localhost:5173", "https://nitwse-backend.onrender.com"], supports_credentials=True)
 
 
