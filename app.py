@@ -20,7 +20,8 @@ import StockHandle as sh
 import TransactionHandle as tr
 
 acc.users = db["users"]
-sh.db = db
+sh.set_db(client)
+
 tr.set_db(client)
 
 # Register all blueprints
