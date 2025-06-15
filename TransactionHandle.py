@@ -83,7 +83,7 @@ def display():
     except (TypeError, ValueError):
         return jsonify({"error": "Invalid or missing userID"}), 400
 
-    user = mongo.db.usertransactions.find_one({"userID": userID})
+    user = db.usertransactions.find_one({"userID": userID})
     if user:
         return jsonify({
             "balance": user.get("balance", 0),
